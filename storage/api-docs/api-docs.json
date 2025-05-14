@@ -1,0 +1,95 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Documentation",
+        "description": "Documentation for the Bookstore API",
+        "contact": {
+            "email": "admin@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "API Server"
+        }
+    ],
+    "paths": {
+        "/api/gaji-karyawan": {
+            "get": {
+                "tags": [
+                    "GajiKaryawan"
+                ],
+                "summary": "Ambil semua data gaji karyawan",
+                "operationId": "9c4fe05879aeb3e4b5d8396701276157",
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "periode": {
+                                                "type": "string"
+                                            },
+                                            "gaji_pokok": {
+                                                "type": "number"
+                                            },
+                                            "potongan": {
+                                                "type": "number"
+                                            },
+                                            "total_gaji": {
+                                                "type": "number"
+                                            },
+                                            "karyawan": {
+                                                "properties": {
+                                                    "nama": {
+                                                        "type": "string"
+                                                    },
+                                                    "nip": {
+                                                        "type": "string"
+                                                    },
+                                                    "jabatan": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "nama_jabatan": {
+                                                                    "type": "string"
+                                                                },
+                                                                "tunjangan": {
+                                                                    "type": "number"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "GajiKaryawan",
+            "description": "API untuk data gaji karyawan"
+        }
+    ]
+}

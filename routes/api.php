@@ -15,5 +15,6 @@ use App\Http\Controllers\PenggajianController;
 |
 */
 
-// Definisikan route API untuk resource Penggajian
-Route::apiResource('penggajians', PenggajianController::class);
+Route::group([], function (){
+    Route::get('penggajian', [PenggajianController::class, 'listpenggajian']);
+});
