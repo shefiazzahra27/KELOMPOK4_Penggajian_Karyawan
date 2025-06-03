@@ -1,0 +1,1453 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Documentation",
+        "description": "Documentation for the Bookstore API",
+        "contact": {
+            "email": "admin@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "API Server"
+        }
+    ],
+    "paths": {
+        "/karyawan/absensi": {
+            "get": {
+                "tags": [
+                    "AbsensiKaryawan"
+                ],
+                "summary": "Ambil data absensi karyawan, dengan pencarian berdasarkan nama karyawan (wajib)",
+                "operationId": "GetAbsensi",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Kata kunci pencarian nama karyawan (wajib diisi)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data absensi karyawan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data absensi karyawan tersedia"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "nama": {
+                                                        "type": "string",
+                                                        "example": "John Doe"
+                                                    },
+                                                    "nip": {
+                                                        "type": "string",
+                                                        "example": "6535534"
+                                                    },
+                                                    "tanggal": {
+                                                        "type": "string",
+                                                        "format": "date",
+                                                        "example": "2025-06-01"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "Hadir",
+                                                            "Izin",
+                                                            "Sakit",
+                                                            "Alpha"
+                                                        ],
+                                                        "example": "Hadir"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-06-02T10:00:00Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-06-02T11:00:00Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/karyawan/absensi/create": {
+            "post": {
+                "tags": [
+                    "AbsensiKaryawan"
+                ],
+                "summary": "Tambah data absensi karyawan",
+                "operationId": "CreateAbsensiKaryawan",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_karyawan",
+                                    "tanggal",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "id_karyawan": {
+                                        "description": "ID karyawan yang melakukan absensi",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "tanggal": {
+                                        "description": "Tanggal absensi (format YYYY-MM-DD)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-06-02"
+                                    },
+                                    "status": {
+                                        "description": "Status absensi (Hadir, Izin, Sakit, Alpha)",
+                                        "type": "string",
+                                        "example": "Hadir"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Absensi karyawan berhasil ditambahkan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Absensi karyawan berhasil ditambahkan"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasi gagal atau absensi sudah ada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validasi gagal"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/karyawan/absensi/{id}/update": {
+            "put": {
+                "tags": [
+                    "AbsensiKaryawan"
+                ],
+                "summary": "Update data absensi karyawan berdasarkan ID absensi",
+                "operationId": "UpdateAbsensiById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID absensi yang akan diupdate",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "description": "Status absensi (Hadir, Izin, Sakit, Alpha)",
+                                        "type": "string",
+                                        "example": "Hadir"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Absensi karyawan berhasil diupdate",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Absensi karyawan berhasil diupdate"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasi gagal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validasi gagal"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data absensi tidak ditemukan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data absensi tidak ditemukan"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/karyawan/absensi/{id}/delete": {
+            "delete": {
+                "tags": [
+                    "AbsensiKaryawan"
+                ],
+                "summary": "Hapus data absensi karyawan berdasarkan ID absensi",
+                "operationId": "DeleteAbsensiById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID absensi yang akan dihapus",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data absensi berhasil dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data absensi berhasil dihapus"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data absensi tidak ditemukan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data absensi tidak ditemukan"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Terjadi kesalahan saat menghapus data absensi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Gagal menghapus data absensi: ..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/register": {
+            "post": {
+                "tags": [
+                    "AuthentikasiUser"
+                ],
+                "summary": "Register user baru",
+                "operationId": "RegisterUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nama lengkap user",
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "description": "Email user yang unik",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "password": {
+                                        "description": "Password user",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User berhasil didaftarkan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Registrasi berhasil"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasi gagal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validasi gagal"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "AuthentikasiUser"
+                ],
+                "summary": "Login user",
+                "operationId": "LoginUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "Email user",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "password": {
+                                        "description": "Password user",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login berhasil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login berhasil"
+                                        },
+                                        "user": {
+                                            "type": "object"
+                                        },
+                                        "access_token": {
+                                            "type": "string",
+                                            "example": "token_jwt_or_manual_token"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "example": "Bearer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Email atau password salah",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email atau password salah."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasi gagal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validasi gagal"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "tags": [
+                    "AuthentikasiUser"
+                ],
+                "summary": "Logout user yang sedang login",
+                "operationId": "LogoutUser",
+                "responses": {
+                    "200": {
+                        "description": "Logout berhasil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logout berhasil"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/karyawan/gaji": {
+            "get": {
+                "tags": [
+                    "GajiKaryawan"
+                ],
+                "summary": "Ambil data gaji karyawan, dengan pencarian berdasarkan nama karyawan (wajib)",
+                "operationId": "GetGaji",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Kata kunci pencarian nama karyawan (wajib diisi)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data gaji karyawan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data gaji karyawan tersedia"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "nama": {
+                                                        "type": "string",
+                                                        "example": "John Doe"
+                                                    },
+                                                    "nip": {
+                                                        "type": "string",
+                                                        "example": "6535534"
+                                                    },
+                                                    "periode": {
+                                                        "type": "string",
+                                                        "example": "05/2025"
+                                                    },
+                                                    "gaji_pokok": {
+                                                        "type": "integer",
+                                                        "example": 5000000
+                                                    },
+                                                    "potongan": {
+                                                        "type": "integer",
+                                                        "example": 500000
+                                                    },
+                                                    "total_gaji": {
+                                                        "type": "integer",
+                                                        "example": 4500000
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-06-02T10:00:00Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-06-02T11:00:00Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/karyawan/gaji/create": {
+            "post": {
+                "tags": [
+                    "GajiKaryawan"
+                ],
+                "summary": "Tambah data gaji karyawan baru",
+                "operationId": "CreateGajiKaryawan",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_karyawan",
+                                    "periode",
+                                    "gaji_pokok",
+                                    "potongan"
+                                ],
+                                "properties": {
+                                    "id_karyawan": {
+                                        "description": "ID karyawan yang menerima gaji",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "periode": {
+                                        "description": "Periode gaji (Bulan/Tahun)",
+                                        "type": "string",
+                                        "example": "05/2025"
+                                    },
+                                    "gaji_pokok": {
+                                        "description": "Gaji pokok karyawan",
+                                        "type": "integer",
+                                        "example": 5000000
+                                    },
+                                    "potongan": {
+                                        "description": "Potongan gaji",
+                                        "type": "integer",
+                                        "example": 500000
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Gaji karyawan berhasil ditambahkan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Gaji karyawan berhasil ditambahkan"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasi gagal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validasi gagal"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/karyawan/gaji/update/{id_karyawan}": {
+            "put": {
+                "tags": [
+                    "GajiKaryawan"
+                ],
+                "summary": "Update data gaji karyawan berdasarkan ID karyawan",
+                "operationId": "UpdateGajiKaryawanByIdKaryawan",
+                "parameters": [
+                    {
+                        "name": "id_karyawan",
+                        "in": "path",
+                        "description": "ID karyawan yang gajinya akan diupdate",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "periode",
+                                    "gaji_pokok",
+                                    "potongan"
+                                ],
+                                "properties": {
+                                    "periode": {
+                                        "description": "Periode gaji (Bulan/Tahun)",
+                                        "type": "string",
+                                        "example": "05/2025"
+                                    },
+                                    "gaji_pokok": {
+                                        "description": "Gaji pokok karyawan",
+                                        "type": "integer",
+                                        "example": 5000000
+                                    },
+                                    "potongan": {
+                                        "description": "Potongan gaji",
+                                        "type": "integer",
+                                        "example": 500000
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Gaji karyawan berhasil diupdate",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Gaji karyawan berhasil diupdate"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasi gagal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validasi gagal"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data gaji tidak ditemukan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data gaji tidak ditemukan"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/karyawan/gaji/delete/{id_karyawan}": {
+            "delete": {
+                "tags": [
+                    "GajiKaryawan"
+                ],
+                "summary": "Hapus data gaji karyawan berdasarkan ID karyawan",
+                "operationId": "DeleteGajiByKaryawanId",
+                "parameters": [
+                    {
+                        "name": "id_karyawan",
+                        "in": "path",
+                        "description": "ID karyawan yang gajinya akan dihapus",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data gaji berhasil dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data gaji berhasil dihapus"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data gaji tidak ditemukan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data gaji tidak ditemukan"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Terjadi kesalahan saat menghapus data gaji",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Gagal menghapus data gaji: ..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/karyawan": {
+            "get": {
+                "tags": [
+                    "Karyawan"
+                ],
+                "summary": "Ambil data karyawan, dengan opsi pencarian berdasarkan nama",
+                "operationId": "GetKaryawan",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Kata kunci pencarian nama karyawan (opsional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data karyawan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data karyawan tersedia"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "nama": {
+                                                        "type": "string",
+                                                        "example": "John Doe"
+                                                    },
+                                                    "nip": {
+                                                        "type": "string",
+                                                        "example": "6535534"
+                                                    },
+                                                    "jenis_kelamin": {
+                                                        "type": "string",
+                                                        "example": "pria"
+                                                    },
+                                                    "tanggal_lahir": {
+                                                        "type": "string",
+                                                        "format": "date",
+                                                        "example": "2025-06-01"
+                                                    },
+                                                    "alamat": {
+                                                        "type": "string",
+                                                        "example": "Jl. Contoh No. 123"
+                                                    },
+                                                    "jabatan": {
+                                                        "type": "string",
+                                                        "example": "manager"
+                                                    },
+                                                    "tunjangan": {
+                                                        "type": "number",
+                                                        "example": 1500000
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-06-02T10:00:00Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-06-02T11:00:00Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/karyawan/create": {
+            "post": {
+                "tags": [
+                    "Karyawan"
+                ],
+                "summary": "Tambah data karyawan baru",
+                "operationId": "CreateKaryawan",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nama",
+                                    "nip",
+                                    "jenis_kelamin",
+                                    "tanggal_lahir",
+                                    "jabatan",
+                                    "tunjangan"
+                                ],
+                                "properties": {
+                                    "nama": {
+                                        "type": "string",
+                                        "example": "Budi Santoso"
+                                    },
+                                    "nip": {
+                                        "type": "string",
+                                        "example": "1234567890"
+                                    },
+                                    "jenis_kelamin": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pria",
+                                            "perempuan"
+                                        ],
+                                        "example": "pria"
+                                    },
+                                    "tanggal_lahir": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-05-01"
+                                    },
+                                    "alamat": {
+                                        "type": "string",
+                                        "example": "Jl. Melati No. 12"
+                                    },
+                                    "jabatan": {
+                                        "type": "string",
+                                        "enum": [
+                                            "manager",
+                                            "kepala divisi",
+                                            "karyawan tetap",
+                                            "karyawan kontrak",
+                                            "office boy"
+                                        ],
+                                        "example": "manager"
+                                    },
+                                    "tunjangan": {
+                                        "type": "integer",
+                                        "example": 2000000
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Karyawan berhasil ditambahkan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Karyawan berhasil ditambahkan"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasi gagal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validasi gagal"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/karyawan/update/{id}": {
+            "put": {
+                "tags": [
+                    "Karyawan"
+                ],
+                "summary": "Update data karyawan berdasarkan ID",
+                "description": "Mengubah data karyawan berdasarkan ID",
+                "operationId": "UpdateKaryawan",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID unik karyawan yang akan diperbarui",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Data karyawan yang akan diperbarui",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nip",
+                                    "nama",
+                                    "jenis_kelamin",
+                                    "tanggal_lahir",
+                                    "jabatan",
+                                    "tunjangan"
+                                ],
+                                "properties": {
+                                    "nip": {
+                                        "type": "string",
+                                        "example": "6535534"
+                                    },
+                                    "nama": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "jenis_kelamin": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pria",
+                                            "perempuan"
+                                        ],
+                                        "example": "pria"
+                                    },
+                                    "tanggal_lahir": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-06-01"
+                                    },
+                                    "alamat": {
+                                        "type": "string",
+                                        "example": "Jl. Contoh No. 123"
+                                    },
+                                    "jabatan": {
+                                        "type": "string",
+                                        "example": "manager"
+                                    },
+                                    "tunjangan": {
+                                        "type": "number",
+                                        "example": 1500000
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Data Karyawan berhasil diperbarui",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data Karyawan berhasil diperbarui"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "nip": {
+                                                    "type": "string",
+                                                    "example": "123456"
+                                                },
+                                                "nama": {
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                },
+                                                "jenis_kelamin": {
+                                                    "type": "string",
+                                                    "example": "pria"
+                                                },
+                                                "tanggal_lahir": {
+                                                    "type": "string",
+                                                    "format": "date",
+                                                    "example": "2025-06-01"
+                                                },
+                                                "alamat": {
+                                                    "type": "string",
+                                                    "example": "Jl. Contoh No. 123"
+                                                },
+                                                "jabatan": {
+                                                    "type": "string",
+                                                    "example": "manager"
+                                                },
+                                                "tunjangan": {
+                                                    "type": "number",
+                                                    "example": 1500000
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Karyawan tidak ditemukan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Karyawan tidak ditemukan"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validasi gagal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validasi gagal"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/karyawan/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "Karyawan"
+                ],
+                "summary": "Hapus karyawan berdasarkan ID",
+                "operationId": "DeleteKaryawan",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID karyawan yang akan dihapus",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data Karyawan berhasil dihapus",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data Karyawan berhasil dihapus"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Gagal menghapus data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Karyawan tidak ditemukan atau gagal menghapus data"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "AuthentikasiUser",
+            "description": "Endpoint terkait login register user"
+        },
+        {
+            "name": "Karyawan",
+            "description": "Endpoint terkait data karyawan"
+        },
+        {
+            "name": "GajiKaryawan",
+            "description": "Endpoint terkait data gaji karyawan"
+        },
+        {
+            "name": "AbsensiKaryawan",
+            "description": "Endpoint terkait data absensi karyawan"
+        }
+    ],
+    "security": {
+        "security": [
+            {
+                "bearerAuth": []
+            }
+        ]
+    }
+}
