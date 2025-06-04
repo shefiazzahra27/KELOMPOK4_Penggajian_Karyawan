@@ -50,21 +50,7 @@ class AbsensiSeeder extends Seeder
                 'status' => 'Hadir',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-            [
-                'id_karyawan' => 1,
-                'tanggal' => Carbon::create('2025', '05', '01'),
-                'status' => 'Hadir',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'id_karyawan' => 1,
-                'tanggal' => Carbon::create('2025', '05', '01'),
-                'status' => 'Hadir',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            ]
         ]);
     }
 }

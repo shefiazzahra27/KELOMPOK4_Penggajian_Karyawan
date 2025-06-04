@@ -19,6 +19,7 @@
         }
     ],
     "paths": {
+<<<<<<< HEAD
         "/karyawan/absensi": {
             "get": {
                 "tags": [
@@ -609,10 +610,14 @@
             }
         },
         "/karyawan/gaji": {
+=======
+        "/api/gaji-karyawan": {
+>>>>>>> 01dd47f23c57441eae1b33569c2fb511dff66cca
             "get": {
                 "tags": [
                     "GajiKaryawan"
                 ],
+<<<<<<< HEAD
                 "summary": "Ambil data gaji karyawan, dengan pencarian berdasarkan nama karyawan (wajib)",
                 "operationId": "GetGaji",
                 "parameters": [
@@ -1055,10 +1060,60 @@
                                                         "type": "string",
                                                         "format": "date-time",
                                                         "example": "2025-06-02T11:00:00Z"
+=======
+                "summary": "Ambil semua data gaji karyawan",
+                "operationId": "9c4fe05879aeb3e4b5d8396701276157",
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "periode": {
+                                                "type": "string"
+                                            },
+                                            "gaji_pokok": {
+                                                "type": "number"
+                                            },
+                                            "potongan": {
+                                                "type": "number"
+                                            },
+                                            "total_gaji": {
+                                                "type": "number"
+                                            },
+                                            "karyawan": {
+                                                "properties": {
+                                                    "nama": {
+                                                        "type": "string"
+                                                    },
+                                                    "nip": {
+                                                        "type": "string"
+                                                    },
+                                                    "jabatan": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "nama_jabatan": {
+                                                                    "type": "string"
+                                                                },
+                                                                "tunjangan": {
+                                                                    "type": "number"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+>>>>>>> 01dd47f23c57441eae1b33569c2fb511dff66cca
                                                     }
                                                 },
                                                 "type": "object"
                                             }
+<<<<<<< HEAD
                                         }
                                     },
                                     "type": "object"
@@ -1173,10 +1228,16 @@
                                         }
                                     },
                                     "type": "object"
+=======
+                                        },
+                                        "type": "object"
+                                    }
+>>>>>>> 01dd47f23c57441eae1b33569c2fb511dff66cca
                                 }
                             }
                         }
                     }
+<<<<<<< HEAD
                 },
                 "security": [
                     {
@@ -1422,11 +1483,15 @@
                 "type": "http",
                 "bearerFormat": "JWT",
                 "scheme": "bearer"
+=======
+                }
+>>>>>>> 01dd47f23c57441eae1b33569c2fb511dff66cca
             }
         }
     },
     "tags": [
         {
+<<<<<<< HEAD
             "name": "AuthentikasiUser",
             "description": "Endpoint terkait login register user"
         },
@@ -1450,4 +1515,10 @@
             }
         ]
     }
+=======
+            "name": "GajiKaryawan",
+            "description": "API untuk data gaji karyawan"
+        }
+    ]
+>>>>>>> 01dd47f23c57441eae1b33569c2fb511dff66cca
 }

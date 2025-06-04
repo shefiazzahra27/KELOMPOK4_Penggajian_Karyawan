@@ -4,6 +4,4 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GajiKaryawanController;
 
-Route::get('/', function () {
-    abort(403);
-});
+Route::get('/karyawan', [GajiKaryawanController::class, 'index']); // Menampilkan data

@@ -26,4 +26,14 @@ class Karyawan extends Model
         return $this->hasMany(Gaji::class, 'id_karyawan'); // menambahkan 'id_karyawan'
     }
 
+
+    /**
+     * Relasi ke tabel jabatan melalui pivot (many-to-many)
+     */
+    public function jabatans()
+    {
+        return $this->belongsToMany(Jabatan::class, 'karyawan_jabatans', 'id_karyawan', 'id_jabatan')
+            ->using(KaryawanJabatan::class)
+            ->withTimestamps();
+    }
 }

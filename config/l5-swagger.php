@@ -108,8 +108,13 @@ return [
              * @link https://zircote.github.io/swagger-php/reference/processors.html
              */
             'default_processors_configuration' => [
+<<<<<<< HEAD
                 /** Example */
                 /**
+=======
+            /** Example */
+            /**
+>>>>>>> 01dd47f23c57441eae1b33569c2fb511dff66cca
              * 'operationId.hash' => true,
              * 'pathFilter' => [
              * 'tags' => [
@@ -169,12 +174,15 @@ return [
          * API security definitions. Will be generated into documentation file.
         */
         'securityDefinitions' => [
+<<<<<<< HEAD
             'bearerAuth' => [
                 'type' => 'apiKey',
                 'description' => 'Enter token with Bearer prefix',
                 'name' => 'Authorization',
                 'in' => 'header',
             ],
+=======
+>>>>>>> 01dd47f23c57441eae1b33569c2fb511dff66cca
             'securitySchemes' => [
                 /*
                  * Examples of Security schemes
@@ -220,6 +228,7 @@ return [
                     'name' => 'Authorization', // The name of the header or query parameter to be used.
                     'in' => 'header', // The location of the API key. Valid values are "query" or "header".
                 ],
+<<<<<<< HEAD
                 */],
             'security' => [
                 'security' => [
@@ -227,6 +236,14 @@ return [
                         'bearerAuth' => [],
                     ],
                 ],
+=======
+                */
+            ],
+            'security' => [
+                /*
+                 * Examples of Securities
+                 */
+>>>>>>> 01dd47f23c57441eae1b33569c2fb511dff66cca
                 [
                     /*
                     'oauth2_security_example' => [
@@ -235,7 +252,12 @@ return [
                     ],
 
                     'passport' => []
+<<<<<<< HEAD
                     */],
+=======
+                    */
+                ],
+>>>>>>> 01dd47f23c57441eae1b33569c2fb511dff66cca
             ],
         ],
 
